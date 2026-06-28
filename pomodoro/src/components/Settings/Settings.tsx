@@ -2,18 +2,45 @@ import { useState } from 'react';
 import { useTimer } from '../../hooks/useTimer';
 import { WORK_PRESETS, DEFAULT_CONFIG } from '../../core/types';
 import type { TimerMode } from '../../core/types';
+import { Toggle } from '../ui/Toggle';
+import type { ShortcutBindings } from '../../hooks/useGlobalShortcuts';
+import { DEFAULT_BINDINGS } from '../../hooks/useGlobalShortcuts';
 import styles from './Settings.module.css';
 
 function toMin(seconds: number): number {
   return Math.round(seconds / 60);
 }
 
-export function Settings() {
+interface SettingsProps {
+  shortcutBindings?: ShortcutBindings;
+  onBindingsChange?: (b: ShortcutBindings) => void;
+}
+
+export function Settings({ shortcutBindings, onBindingsChange }: SettingsProps) {
   const { state, dispatch } = useTimer();
   const { config, phase } = state;
   const [collapsed, setCollapsed] = useState(true);
+  const [recording, setRecording] = useState<string | null>(null);
 
   const isIdle = phase === 'idle';
+
+  // ---- Shortcut recording ----
+  const startRecording = (action: string) => {
+    setRecording(action);
+  };
+
+  const handleRecordKey = (e: React.KeyboardEvent) => {
+    if (!recording || !onBindingsChange || !shortcutBindings) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const parts: string[] = [];
+    if (e.ctrlKey) parts.push('Ctrl');
+    if (e.shiftKey) parts.push('Shift');
+    parts.push(e.key.length === 1 ? e.key.toUpperCase() : e.key);
+    const combo = parts.join('+');
+    onBindingsChange({ ...shortcutBindings, [recording]: combo });
+    setRecording(null);
+  };
 
   // ---- Handlers ----
 
@@ -241,17 +268,15 @@ export function Settings() {
                 Break ends → start working
               </span>
             </label>
-            <button
-              className={`${styles.toggleBtn} ${config.autoStartWork ? styles.toggleOn : ''}`}
-              onClick={() =>
+            <Toggle
+              checked={config.autoStartWork}
+              onChange={() =>
                 dispatch({
                   type: 'UPDATE_CONFIG',
                   config: { autoStartWork: !config.autoStartWork },
                 })
               }
-            >
-              <span className={styles.toggleKnob} />
-            </button>
+            />
           </div>
 
           {/* ---- Test helpers ---- */}
@@ -296,22 +321,58 @@ export function Settings() {
             </div>
           </div>
 
+          {/* ---- Keyboard shortcuts ---- */}
+          {shortcutBindings && onBindingsChange && (
+            <div className={styles.field}>
+              <label className={styles.label}>
+                <span>⌨️ Keyboard shortcuts</span>
+              </label>
+              <div
+                className={styles.shortcutList}
+                onKeyDown={recording ? handleRecordKey : undefined}
+                tabIndex={recording ? 0 : undefined}
+              >
+                {(['startPause', 'skipNext'] as const).map((action) => {
+                  const label =
+                    action === 'startPause' ? 'Start / Pause' : 'Skip / Next';
+                  const current = shortcutBindings[action];
+                  const isRec = recording === action;
+                  return (
+                    <div key={action} className={styles.shortcutRow}>
+                      <span className={styles.shortcutLabel}>{label}</span>
+                      <button
+                        className={`${styles.shortcutKey} ${isRec ? styles.recording : ''}`}
+                        onClick={() => startRecording(action)}
+                      >
+                        {isRec ? 'Press keys...' : current}
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+              <button
+                className={styles.presetBtn}
+                onClick={() => onBindingsChange({ ...DEFAULT_BINDINGS })}
+              >
+                Reset to defaults
+              </button>
+            </div>
+          )}
+
           {/* ---- Notifications toggle ---- */}
           <div className={styles.field}>
             <label className={styles.label}>
               <span>🔔 Desktop notifications</span>
             </label>
-            <button
-              className={`${styles.toggleBtn} ${config.enableNotifications ? styles.toggleOn : ''}`}
-              onClick={() =>
+            <Toggle
+              checked={config.enableNotifications}
+              onChange={() =>
                 dispatch({
                   type: 'UPDATE_CONFIG',
                   config: { enableNotifications: !config.enableNotifications },
                 })
               }
-            >
-              <span className={styles.toggleKnob} />
-            </button>
+            />
           </div>
 
           <p className={styles.readonly}>

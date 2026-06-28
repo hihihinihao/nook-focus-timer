@@ -14,6 +14,7 @@ import { ExportButton } from './components/ExportButton/ExportButton';
 import { DockZone } from './components/DockZone/DockZone';
 import { CalendarHeatmap } from './components/CalendarHeatmap/CalendarHeatmap';
 import { DayDetail } from './components/CalendarHeatmap/DayDetail';
+import { useGlobalShortcuts, loadBindings, saveBindings, type ShortcutBindings } from './hooks/useGlobalShortcuts';
 import * as storage from './core/storage';
 import { loadSessionsForDates } from './core/statistics';
 import type { TodoItem } from './core/types';
@@ -62,13 +63,14 @@ function saveTheme(t: Theme) {
 }
 
 function AppContent() {
-  const { state } = useTimer();
+  const { state, dispatch } = useTimer();
   const { phase, remainingSeconds, elapsedSeconds, config } = state;
   const [activeTab, setActiveTab] = useState<Page>('timer');
   const [dockPosition, setDockPosition] = useState<DockPosition>(loadDockPosition);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [todosVersion, setTodosVersion] = useState(0);
   const [theme, setTheme] = useState<Theme>(loadTheme);
+  const [shortcutBindings, setShortcutBindings] = useState<ShortcutBindings>(loadBindings);
   const isMobile = useMobile();
   const dragEnabled = !isMobile;
 
@@ -82,6 +84,25 @@ function AppContent() {
     const idx = THEME_CYCLE.indexOf(theme);
     setTheme(THEME_CYCLE[(idx + 1) % THEME_CYCLE.length]);
   };
+
+  // Keyboard shortcuts
+  useGlobalShortcuts({
+    bindings: shortcutBindings,
+    onStartPause: () => {
+      if (state.phase === 'working' || state.phase === 'break') {
+        dispatch({ type: 'PAUSE' });
+      } else {
+        dispatch({ type: 'START' });
+      }
+    },
+    onSkipNext: () => {
+      if (state.phase === 'working' || state.phase === 'break') {
+        const isBreak = state.phase === 'break';
+        const mode = isBreak ? state.config.breakMode : state.config.workMode;
+        dispatch({ type: mode === 'countup' ? 'COMPLETE' : 'SKIP' });
+      }
+    },
+  });
 
   // Load all session data for calendar & stats
   const allSessionsByDate = useMemo(() => {
@@ -165,7 +186,13 @@ function AppContent() {
           <div className={styles.timerArea}>
             <Timer />
             <TimerControls />
-            <Settings />
+            <Settings
+              shortcutBindings={shortcutBindings}
+              onBindingsChange={(b) => {
+                setShortcutBindings(b);
+                saveBindings(b);
+              }}
+            />
           </div>
           <TodoList
             dragHandlers={dragEnabled ? dragHandlers : undefined}

@@ -154,37 +154,6 @@
   padding: 8px 0;
 }
 
-/* ---- Notification toggle switch ---- */
-
-.toggleBtn {
-  position: relative;
-  width: 44px;
-  height: 24px;
-  border-radius: 12px;
-  background: var(--color-border);
-  transition: background 0.2s;
-  padding: 0;
-}
-
-.toggleBtn.toggleOn {
-  background: var(--color-primary);
-}
-
-.toggleKnob {
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #fff;
-  transition: transform 0.2s;
-}
-
-.toggleOn .toggleKnob {
-  transform: translateX(20px);
-}
-
 .toggleHint {
   font-size: 11px;
   color: var(--color-text-muted);
@@ -262,4 +231,55 @@
 .presetBtn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* ---- Keyboard shortcuts ---- */
+
+.shortcutList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.shortcutRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0;
+}
+
+.shortcutLabel {
+  font-size: 13px;
+  color: var(--color-text);
+}
+
+.shortcutKey {
+  padding: 4px 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background: var(--color-bg);
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  min-width: 110px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.shortcutKey:hover {
+  border-color: var(--color-primary);
+  color: var(--color-text);
+}
+
+.recording {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  animation: pulse 0.8s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }

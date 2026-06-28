@@ -1,4 +1,5 @@
 import { useTimer } from '../../hooks/useTimer';
+import { Button } from '../ui/Button';
 import styles from './TimerControls.module.css';
 
 export function TimerControls() {
@@ -10,49 +11,33 @@ export function TimerControls() {
   const isPaused = phase === 'paused';
   const isBreak = phase === 'break';
 
-  // Determine current mode
   const mode = isBreak ? config.breakMode : config.workMode;
   const isCountUp = mode === 'countup';
 
   return (
     <div className={styles.controls}>
-      {/* Reset — always visible when not idle */}
       {!isIdle && (
-        <button
-          className={`${styles.btn} ${styles.secondary}`}
-          onClick={() => dispatch({ type: 'RESET' })}
-        >
+        <Button variant="secondary" onClick={() => dispatch({ type: 'RESET' })}>
           Reset
-        </button>
+        </Button>
       )}
 
-      {/* Main button: Start / Pause */}
       {isRunning && (
-        <button
-          className={`${styles.btn} ${styles.primary} ${styles.pause}`}
-          onClick={() => dispatch({ type: 'PAUSE' })}
-        >
+        <Button variant="primary" className={styles.pause} onClick={() => dispatch({ type: 'PAUSE' })}>
           Pause
-        </button>
+        </Button>
       )}
 
       {(isIdle || isPaused) && (
-        <button
-          className={`${styles.btn} ${styles.primary} ${styles.start}`}
-          onClick={() => dispatch({ type: 'START' })}
-        >
+        <Button variant="primary" onClick={() => dispatch({ type: 'START' })}>
           {isPaused ? 'Resume' : 'Start'}
-        </button>
+        </Button>
       )}
 
-      {/* Complete / Skip — available during work or break */}
       {isRunning && (
-        <button
-          className={`${styles.btn} ${styles.skip}`}
-          onClick={() => dispatch({ type: isCountUp ? 'COMPLETE' : 'SKIP' })}
-        >
+        <Button variant="ghost" onClick={() => dispatch({ type: isCountUp ? 'COMPLETE' : 'SKIP' })}>
           {isCountUp ? 'Complete' : 'Skip'}
-        </button>
+        </Button>
       )}
     </div>
   );

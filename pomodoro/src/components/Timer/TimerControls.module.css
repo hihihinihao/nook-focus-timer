@@ -1,5 +1,5 @@
 /* ============================================================
-   TimerControls — start/pause/reset/skip buttons
+   TimerControls — button row layout
    ============================================================ */
 
 .controls {
@@ -9,68 +9,11 @@
   gap: 16px;
 }
 
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px 28px;
-  border-radius: var(--radius);
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  transition: background 0.2s, transform 0.1s, opacity 0.2s;
-}
-
-.btn:active {
-  transform: scale(0.97);
-}
-
-/* Primary action — Start / Pause */
-.primary {
-  min-width: 140px;
-  padding: 14px 40px;
-  font-size: 18px;
-  border-radius: 14px;
-  color: #fff;
-}
-
-.start {
-  background: var(--color-primary);
-}
-.start:hover {
-  background: #ff5252;
-}
-
 .pause {
   background: #ffa726;
   color: #1a1a1a;
 }
 .pause:hover {
   background: #ff9800;
-}
-
-/* Secondary actions */
-.secondary {
-  background: var(--color-surface);
-  color: var(--color-text-muted);
-  border: 1px solid var(--color-border);
-  font-size: 14px;
-  padding: 10px 20px;
-}
-.secondary:hover {
-  background: var(--color-surface-hover);
-  color: var(--color-text);
-}
-
-/* Skip button — subtle */
-.skip {
-  background: transparent;
-  color: var(--color-text-muted);
-  font-size: 13px;
-  padding: 8px 16px;
-}
-.skip:hover {
-  color: var(--color-text);
-  background: var(--color-surface);
 }
 
