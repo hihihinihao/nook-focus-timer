@@ -1,0 +1,259 @@
+/* ============================================================
+   DayDetail — combined tasks + sessions for a calendar date
+   ============================================================ */
+
+.panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  max-width: 500px;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* ---- Header ---- */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.closeBtn {
+  padding: 4px 8px;
+  font-size: 14px;
+  background: transparent;
+  color: var(--color-text-muted);
+  border-radius: 4px;
+  transition: color 0.2s, background 0.2s;
+}
+
+.closeBtn:hover {
+  color: var(--color-text);
+  background: var(--color-surface-hover);
+}
+
+/* ---- Sections ---- */
+
+.section {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.section:last-child {
+  border-bottom: none;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--color-text-muted);
+  margin-bottom: 12px;
+}
+
+.badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  padding: 2px 8px;
+  border-radius: 99px;
+  white-space: nowrap;
+}
+
+/* ---- Input ---- */
+
+.inputRow {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.input {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 13px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.input:focus {
+  border-color: var(--color-primary);
+}
+
+.addBtn {
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--color-primary);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  transition: background 0.2s;
+}
+
+.addBtn:hover {
+  background: #ff5252;
+}
+
+/* ---- Todo list ---- */
+
+.todoList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.todoItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: var(--color-bg);
+  border-radius: var(--radius-sm);
+  transition: background 0.2s;
+}
+
+.todoItem:hover {
+  background: var(--color-surface-hover);
+}
+
+.checkbox {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--color-border);
+  border-radius: 3px;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.checkbox:checked {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.checkbox:checked::after {
+  content: '✓';
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.todoText {
+  flex: 1;
+  font-size: 13px;
+  color: var(--color-text);
+}
+
+.todoDone {
+  text-decoration: line-through;
+  color: var(--color-text-muted);
+}
+
+.deleteBtn {
+  padding: 2px 6px;
+  font-size: 11px;
+  background: transparent;
+  color: var(--color-text-muted);
+  border-radius: 3px;
+  opacity: 0;
+  transition: opacity 0.2s, color 0.2s;
+}
+
+.todoItem:hover .deleteBtn {
+  opacity: 1;
+}
+
+.deleteBtn:hover {
+  color: #ff5252;
+}
+
+.clearBtn {
+  margin-top: 8px;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.clearBtn:hover {
+  color: #ff5252;
+}
+
+.empty {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  text-align: center;
+  padding: 8px 0;
+}
+
+/* ---- Session list ---- */
+
+.sessionList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sessionItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 10px;
+  background: var(--color-bg);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+}
+
+.sessionIdx {
+  color: var(--color-text-muted);
+}
+
+.sessionTime {
+  flex: 1;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.sessionDuration {
+  color: var(--color-success);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.sessionTotal {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--color-text-muted);
+  text-align: right;
+}

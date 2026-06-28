@@ -8,30 +8,71 @@
   flex-direction: column;
 }
 
+/* ---- Main area ---- */
+
 .main {
   flex: 1;
   display: flex;
-  flex-direction: column;
   align-items: center;
   padding: 20px 16px 40px;
+  gap: 24px;
+}
+
+/* Dock: bottom (default) — column layout, timer on top, todo below */
+.main.dock_bottom {
+  flex-direction: column;
+  align-items: center;
+}
+
+.main.dock_bottom .timerArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  width: 100%;
+}
+
+/* Dock: left / right — row layout, todo on the docked side */
+.main.dock_left,
+.main.dock_right {
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 40px;
   gap: 32px;
 }
 
-.sidePanels {
+/* Timer area gets centered, takes available space */
+.main.dock_left .timerArea,
+.main.dock_right .timerArea {
   display: flex;
-  gap: 24px;
-  width: 100%;
-  max-width: 760px;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  flex: 0 1 auto;
 }
 
-@media (max-width: 600px) {
+/* Push todo to left side when dock_left */
+.main.dock_left > :last-child {
+  order: -1;
+}
+
+/* ---- Timer area (Timer + Controls + Settings) ---- */
+
+.timerArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ---- Responsive ---- */
+
+@media (max-width: 767px) {
   .main {
+    flex-direction: column !important;
+    align-items: center !important;
     gap: 24px;
     padding: 16px 12px 32px;
   }
-
-  .sidePanels {
-    flex-direction: column;
-    align-items: center;
-  }
 }
+

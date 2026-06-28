@@ -3,15 +3,15 @@
 // Swap this file out for Unity PlayerPrefs or file I/O when porting.
 // ============================================================
 
-import type { TimerConfig, Session } from './types';
+import type { TimerConfig, Session, TodoItem } from './types';
 import { DEFAULT_CONFIG } from './types';
 
 // ---------------------------------------------------------------------------
 // Keys
 // ---------------------------------------------------------------------------
 
-const CONFIG_KEY = 'pomodoro_config';
-const SESSIONS_PREFIX = 'pomodoro_sessions_'; // + dateKey
+const CONFIG_KEY = 'nook_config';
+const SESSIONS_PREFIX = 'nook_sessions_'; // + dateKey
 
 // ---------------------------------------------------------------------------
 // Config
@@ -66,4 +66,41 @@ export function appendSession(dateKey: string, session: Session): void {
   const sessions = loadSessions(dateKey);
   sessions.push(session);
   saveSessions(dateKey, sessions);
+}
+
+// ---------------------------------------------------------------------------
+// Todos
+// ---------------------------------------------------------------------------
+
+const TODOS_KEY = 'nook_todos';
+
+export function loadTodos(): TodoItem[] {
+  try {
+    const raw = localStorage.getItem(TODOS_KEY);
+    if (!raw) return [];
+    return JSON.parse(raw) as TodoItem[];
+  } catch {
+    return [];
+  }
+}
+
+export function saveTodos(todos: TodoItem[]): void {
+  try {
+    localStorage.setItem(TODOS_KEY, JSON.stringify(todos));
+  } catch {
+    // silently ignore
+  }
+}
+
+/** Return all date keys that have stored sessions, sorted chronologically */
+export function getAllDateKeys(): string[] {
+  const keys: string[] = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key?.startsWith(SESSIONS_PREFIX)) {
+      keys.push(key.slice(SESSIONS_PREFIX.length));
+    }
+  }
+  keys.sort();
+  return keys;
 }

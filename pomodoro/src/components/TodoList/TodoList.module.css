@@ -1,0 +1,314 @@
+/* ============================================================
+   TodoList
+   ============================================================ */
+
+.panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  max-width: 500px;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+/* Narrow when side-docked */
+.panel[data-dock='left'],
+.panel[data-dock='right'] {
+  max-width: 320px;
+  width: 320px;
+}
+
+/* Tighter spacing when side-docked */
+.panel[data-dock='left'] .header,
+.panel[data-dock='right'] .header {
+  padding: 14px 16px;
+}
+
+.panel[data-dock='left'] .bodyInner,
+.panel[data-dock='right'] .bodyInner {
+  padding: 0 16px 16px;
+}
+
+.panel[data-dock='left'] .input,
+.panel[data-dock='right'] .input {
+  padding: 8px 10px;
+  font-size: 13px;
+}
+
+.panel[data-dock='left'] .addBtn,
+.panel[data-dock='right'] .addBtn {
+  padding: 8px 14px;
+  font-size: 13px;
+}
+
+/* ---- Header bar (always visible, click to toggle) ---- */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 16px 20px;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  transition: color 0.2s;
+  text-align: left;
+}
+
+.header:hover {
+  color: var(--color-text);
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chevron {
+  font-size: 10px;
+  transition: transform 0.25s ease;
+  display: inline-block;
+}
+
+.chevronOpen {
+  transform: rotate(90deg);
+}
+
+.headerIcon {
+  font-size: 16px;
+}
+
+.headerTitle {
+  font-size: 13px;
+}
+
+.badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  padding: 2px 8px;
+  border-radius: 99px;
+  white-space: nowrap;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dragHandle {
+  font-size: 16px;
+  cursor: grab;
+  padding: 2px 4px;
+  border-radius: 4px;
+  color: var(--color-text-muted);
+  transition: color 0.2s, background 0.2s;
+  user-select: none;
+  touch-action: none;
+}
+
+.dragHandle:hover {
+  color: var(--color-text);
+  background: var(--color-surface-hover);
+}
+
+.dragHandle:active {
+  cursor: grabbing;
+}
+
+/* ---- Dragging state ---- */
+
+.panel.dragging {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* ---- Collapsible body ---- */
+
+.body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease, opacity 0.25s ease;
+  opacity: 0;
+}
+
+.bodyOpen {
+  max-height: 600px;
+  opacity: 1;
+}
+
+.bodyInner {
+  padding: 0 20px 20px;
+}
+
+/* ---- Input row ---- */
+
+.inputRow {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.dateLabel {
+  width: 100%;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-primary);
+  padding-bottom: 4px;
+}
+
+.input {
+  flex: 1;
+  padding: 10px 14px;
+  font-size: 14px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.input:focus {
+  border-color: var(--color-primary);
+}
+
+.addBtn {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  background: var(--color-primary);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  transition: background 0.2s;
+}
+
+.addBtn:hover {
+  background: #ff5252;
+}
+
+/* ---- List ---- */
+
+.list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.empty {
+  text-align: center;
+  padding: 24px 0;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--color-bg);
+  border-radius: var(--radius-sm);
+  transition: background 0.2s;
+}
+
+.item:hover {
+  background: var(--color-surface-hover);
+}
+
+.checkbox {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--color-border);
+  border-radius: 4px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s, border-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkbox:checked {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.checkbox:checked::after {
+  content: '✓';
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.text {
+  flex: 1;
+  font-size: 14px;
+  color: var(--color-text);
+  transition: color 0.2s;
+}
+
+.text.done {
+  text-decoration: line-through;
+  color: var(--color-text-muted);
+}
+
+.deleteBtn {
+  padding: 4px 8px;
+  font-size: 13px;
+  background: transparent;
+  color: var(--color-text-muted);
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.2s, color 0.2s, background 0.2s;
+}
+
+.item:hover .deleteBtn {
+  opacity: 1;
+}
+
+.deleteBtn:hover {
+  color: #ff5252;
+  background: rgba(255, 82, 82, 0.1);
+}
+
+/* ---- Footer ---- */
+
+.footer {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border);
+  font-size: 12px;
+  color: var(--color-text-muted);
+  display: flex;
+  justify-content: space-between;
+}
+
+.clearBtn {
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.clearBtn:hover {
+  color: #ff5252;
+}

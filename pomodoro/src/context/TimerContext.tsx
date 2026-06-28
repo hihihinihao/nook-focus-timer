@@ -1,5 +1,5 @@
 // ============================================================
-// React Context + useReducer wrapper around PomodoroTimer.
+// React Context + useReducer wrapper around NookTimer.
 // This is the ONLY place the timer engine instance lives.
 // All UI components consume state through this context.
 // ============================================================
@@ -20,6 +20,7 @@ import {
   type SoundPlayer,
 } from '../core/audio';
 import { DEFAULT_CONFIG } from '../core/types';
+import { notify, isGranted } from '../core/notifications';
 
 // ---------------------------------------------------------------------------
 // Actions that the UI can dispatch
@@ -30,6 +31,7 @@ export type TimerAction =
   | { type: 'PAUSE' }
   | { type: 'RESET' }
   | { type: 'SKIP' }
+  | { type: 'COMPLETE' }
   | { type: 'UPDATE_CONFIG'; config: Partial<TimerConfig> };
 
 // ---------------------------------------------------------------------------
@@ -79,13 +81,21 @@ export function TimerProvider({ children }: { children: ReactNode }) {
       setState(newState);
     });
 
-    // Listen for work_complete to play sound and persist session
+    // Listen for work_complete to play sound, persist session, and notify
     const unsubEvent = timer.onEvent((event) => {
+      const cfg = timer.getState().config;
       if (event.type === 'work_complete') {
         soundRef.current.play();
         addSession(event.session);
+        if (cfg.enableNotifications) {
+          const breakMin = Math.round(cfg.breakDuration / 60);
+          notify('🍅 Focus done!', `Time for a ${breakMin}min break ☕`);
+        }
       } else if (event.type === 'break_complete') {
         soundRef.current.play();
+        if (cfg.enableNotifications) {
+          notify('☕ Break over', 'Ready for another focus session?');
+        }
       }
     });
 
@@ -126,6 +136,9 @@ export function TimerProvider({ children }: { children: ReactNode }) {
           break;
         case 'SKIP':
           timer.skip();
+          break;
+        case 'COMPLETE':
+          timer.complete();
           break;
         case 'UPDATE_CONFIG':
           timer.updateConfig(action.config);

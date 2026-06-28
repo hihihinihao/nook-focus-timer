@@ -3,11 +3,16 @@ import styles from './TimerControls.module.css';
 
 export function TimerControls() {
   const { state, dispatch } = useTimer();
-  const { phase } = state;
+  const { phase, config } = state;
 
   const isIdle = phase === 'idle';
   const isRunning = phase === 'working' || phase === 'break';
   const isPaused = phase === 'paused';
+  const isBreak = phase === 'break';
+
+  // Determine current mode
+  const mode = isBreak ? config.breakMode : config.workMode;
+  const isCountUp = mode === 'countup';
 
   return (
     <div className={styles.controls}>
@@ -40,13 +45,13 @@ export function TimerControls() {
         </button>
       )}
 
-      {/* Skip — available during work or break */}
+      {/* Complete / Skip — available during work or break */}
       {isRunning && (
         <button
           className={`${styles.btn} ${styles.skip}`}
-          onClick={() => dispatch({ type: 'SKIP' })}
+          onClick={() => dispatch({ type: isCountUp ? 'COMPLETE' : 'SKIP' })}
         >
-          Skip
+          {isCountUp ? 'Complete' : 'Skip'}
         </button>
       )}
     </div>

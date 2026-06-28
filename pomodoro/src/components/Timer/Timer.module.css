@@ -43,6 +43,11 @@
   stroke: var(--color-break);
 }
 
+/* Overtime in count-up mode */
+.ringProgress.overtimePhase {
+  stroke: #ffa726;
+}
+
 /* ---- Countdown text (centered inside ring) ---- */
 
 .countdown {

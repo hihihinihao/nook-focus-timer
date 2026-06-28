@@ -1,7 +1,7 @@
 // ============================================================
-// PomodoroTimer — pure TypeScript state machine.
+// NookTimer — pure TypeScript state machine.
 // ZERO imports from React, DOM, or any framework.
-// Portable to any JS runtime (browser, WebView, Node).
+// Supports both countdown and countup modes per phase.
 // ============================================================
 
 import type {
@@ -10,20 +10,19 @@ import type {
   TimerListener,
   TimerEventCallback,
   Session,
+  TimerMode,
 } from './types';
 import { DEFAULT_CONFIG } from './types';
 
 // ---------------------------------------------------------------------------
-// Helpers (also exported — framework-free utility functions)
+// Helpers
 // ---------------------------------------------------------------------------
 
-/** Return the date key for today (YYYY-MM-DD) */
 export function todayKey(): string {
   const d = new Date();
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
-/** Format seconds as MM:SS */
 export function formatTime(seconds: number): string {
   const m = Math.floor(seconds / 60);
   const s = seconds % 60;
@@ -31,17 +30,16 @@ export function formatTime(seconds: number): string {
 }
 
 // ---------------------------------------------------------------------------
-// PomodoroTimer
+// NookTimer
 // ---------------------------------------------------------------------------
 
 export class PomodoroTimer {
-  // ---- private state ----
   private _config: TimerConfig;
   private _phase: TimerState['phase'] = 'idle';
   private _remainingSeconds: number;
+  private _elapsedSeconds = 0;
   private _completedSessions = 0;
   private _sessionsSinceLongBreak = 0;
-  /** Remember which phase was active when we paused, so resume can restore it */
   private _pausedFrom: 'working' | 'break' = 'working';
 
   private _intervalId: ReturnType<typeof setInterval> | null = null;
@@ -61,6 +59,7 @@ export class PomodoroTimer {
     return {
       phase: this._phase,
       remainingSeconds: this._remainingSeconds,
+      elapsedSeconds: this._elapsedSeconds,
       totalSeconds: this._getPhaseTotal(),
       completedSessions: this._completedSessions,
       sessionsSinceLongBreak: this._sessionsSinceLongBreak,
@@ -70,7 +69,6 @@ export class PomodoroTimer {
 
   // ---- public: subscribe / unsubscribe ----
 
-  /** Subscribe to every state change. Returns an unsubscribe function. */
   subscribe(listener: TimerListener): () => void {
     this._listeners.add(listener);
     return () => {
@@ -78,7 +76,6 @@ export class PomodoroTimer {
     };
   }
 
-  /** Subscribe to named events (started, paused, work_complete, etc.) */
   onEvent(cb: TimerEventCallback): () => void {
     this._eventCallbacks.add(cb);
     return () => {
@@ -88,26 +85,24 @@ export class PomodoroTimer {
 
   // ---- public: actions ----
 
-  /** Start a new work session from idle, or resume from paused */
   start(): void {
     if (this._phase === 'working' || this._phase === 'break') return;
 
     if (this._phase === 'paused') {
-      // Resume to whatever phase we paused from
       this._transitionTo(this._pausedFrom);
       this._emitEvent({ type: 'resumed' });
       this._startTicking();
       return;
     }
 
-    // Start fresh from idle
+    // Fresh start from idle — set up for work phase
+    this._elapsedSeconds = 0;
     this._remainingSeconds = this._config.workDuration;
     this._transitionTo('working');
     this._emitEvent({ type: 'started' });
     this._startTicking();
   }
 
-  /** Pause the current work or break session */
   pause(): void {
     if (this._phase !== 'working' && this._phase !== 'break') return;
     this._pausedFrom = this._phase;
@@ -116,23 +111,33 @@ export class PomodoroTimer {
     this._emitEvent({ type: 'paused' });
   }
 
-  /** Reset timer to idle (from any state) */
   reset(): void {
     this._stopTicking();
+    this._elapsedSeconds = 0;
     this._remainingSeconds = this._config.workDuration;
     this._transitionTo('idle');
     this._emitEvent({ type: 'reset' });
   }
 
-  /** Skip the current phase — complete work early or skip break */
-  skip(): void {
+  /**
+   * Complete the current phase manually.
+   * In count-up mode this is the primary way to end a session.
+   * In countdown mode this acts as "skip" (same as before).
+   */
+  complete(): void {
     if (this._phase === 'working') {
       this._stopTicking();
       this._completedSessions++;
       this._sessionsSinceLongBreak++;
+
+      const workMode = this._config.workMode;
+      const duration = workMode === 'countup'
+        ? this._elapsedSeconds
+        : this._config.workDuration - this._remainingSeconds;
+
       const session: Session = {
         endedAt: new Date().toISOString(),
-        duration: this._config.workDuration - this._remainingSeconds,
+        duration,
       };
       this._emitEvent({ type: 'work_complete', session });
       this._startBreak();
@@ -140,18 +145,25 @@ export class PomodoroTimer {
       this._stopTicking();
       this._emitEvent({ type: 'break_complete' });
       this._transitionToIdle();
+      if (this._config.autoStartWork) {
+        this.start();
+      }
     }
   }
 
-  /** Update config — resets timer to idle with new settings */
+  /** Alias — skip is the same as complete */
+  skip(): void {
+    this.complete();
+  }
+
   updateConfig(partial: Partial<TimerConfig>): void {
     this._stopTicking();
     this._config = { ...this._config, ...partial };
+    this._elapsedSeconds = 0;
     this._remainingSeconds = this._config.workDuration;
     this._transitionTo('idle');
   }
 
-  /** Clean up the interval. Call before discarding the instance. */
   destroy(): void {
     this._stopTicking();
     this._listeners.clear();
@@ -161,7 +173,7 @@ export class PomodoroTimer {
   // ---- private: ticking ----
 
   private _startTicking(): void {
-    if (this._intervalId !== null) return;
+    this._stopTicking();
     this._intervalId = setInterval(() => this._tick(), 1000);
   }
 
@@ -178,35 +190,64 @@ export class PomodoroTimer {
       return;
     }
 
-    this._remainingSeconds--;
+    const mode = this._currentMode();
 
-    if (this._remainingSeconds <= 0) {
-      this._remainingSeconds = 0;
-      this._stopTicking();
+    if (mode === 'countdown') {
+      this._remainingSeconds--;
+      if (this._remainingSeconds <= 0) {
+        this._remainingSeconds = 0;
+        this._stopTicking();
+        this._onPhaseEnd();
+      }
+    } else {
+      // countup
+      this._elapsedSeconds++;
 
-      if (this._phase === 'working') {
-        this._completedSessions++;
-        this._sessionsSinceLongBreak++;
-        const session: Session = {
-          endedAt: new Date().toISOString(),
-          duration: this._config.workDuration,
-        };
-        this._emitEvent({ type: 'work_complete', session });
-        this._startBreak();
-      } else {
-        this._emitEvent({ type: 'break_complete' });
-        this._transitionToIdle();
+      // Check if auto-switch is enabled and we've reached the target
+      const autoSwitch = this._phase === 'working'
+        ? this._config.workAutoSwitch
+        : this._config.breakAutoSwitch;
+
+      if (autoSwitch && this._elapsedSeconds >= this._getPhaseTotal()) {
+        this._stopTicking();
+        this._onPhaseEnd();
       }
     }
 
-    // Always notify listeners on tick
     this._notifyListeners();
-    this._emitEvent({ type: 'tick', remainingSeconds: this._remainingSeconds });
+    this._emitEvent({
+      type: 'tick',
+      remainingSeconds: this._remainingSeconds,
+      elapsedSeconds: this._elapsedSeconds,
+    });
+  }
+
+  private _onPhaseEnd(): void {
+    if (this._phase === 'working') {
+      this._completedSessions++;
+      this._sessionsSinceLongBreak++;
+      const duration = this._config.workMode === 'countup'
+        ? this._elapsedSeconds
+        : this._config.workDuration;
+      const session: Session = {
+        endedAt: new Date().toISOString(),
+        duration,
+      };
+      this._emitEvent({ type: 'work_complete', session });
+      this._startBreak();
+    } else {
+      this._emitEvent({ type: 'break_complete' });
+      this._transitionToIdle();
+      if (this._config.autoStartWork) {
+        this.start();
+      }
+    }
   }
 
   private _startBreak(): void {
     const isLongBreak =
       this._sessionsSinceLongBreak >= this._config.sessionsBeforeLongBreak;
+    this._elapsedSeconds = 0;
     this._remainingSeconds = isLongBreak
       ? this._config.longBreakDuration
       : this._config.breakDuration;
@@ -218,11 +259,17 @@ export class PomodoroTimer {
   }
 
   private _transitionToIdle(): void {
+    this._elapsedSeconds = 0;
     this._remainingSeconds = this._config.workDuration;
     this._transitionTo('idle');
   }
 
-  // ---- private: notify ----
+  // ---- private: helpers ----
+
+  private _currentMode(): TimerMode {
+    if (this._phase === 'break') return this._config.breakMode;
+    return this._config.workMode;
+  }
 
   private _transitionTo(phase: TimerState['phase']): void {
     this._phase = phase;
@@ -232,25 +279,15 @@ export class PomodoroTimer {
   private _notifyListeners(): void {
     const state = this.getState();
     for (const listener of this._listeners) {
-      try {
-        listener(state);
-      } catch {
-        // Swallow — one bad listener shouldn't break the timer
-      }
+      try { listener(state); } catch { /* swallow */ }
     }
   }
 
   private _emitEvent(event: import('./types').TimerEvent): void {
     for (const cb of this._eventCallbacks) {
-      try {
-        cb(event);
-      } catch {
-        // Swallow
-      }
+      try { cb(event); } catch { /* swallow */ }
     }
   }
-
-  // ---- private: helpers ----
 
   private _getPhaseTotal(): number {
     switch (this._phase) {

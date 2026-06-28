@@ -1,0 +1,59 @@
+/* ============================================================
+   DockZone — translucent drop-target overlay shown during drag
+   ============================================================ */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: none;
+  display: flex;
+  flex-direction: row;
+}
+
+.zone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed var(--color-border);
+  background: rgba(15, 15, 20, 0.35);
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.zone.active {
+  background: var(--color-primary-soft);
+  border-color: var(--color-primary);
+  border-style: solid;
+}
+
+.left {
+  flex: 0 0 30%;
+}
+
+.bottom {
+  flex: 0 0 40%;
+}
+
+.right {
+  flex: 0 0 30%;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  transition: color 0.2s;
+}
+
+.zone.active .label {
+  color: var(--color-primary);
+}
+
+.currentMark {
+  font-weight: 400;
+  font-size: 11px;
+  opacity: 0.7;
+}

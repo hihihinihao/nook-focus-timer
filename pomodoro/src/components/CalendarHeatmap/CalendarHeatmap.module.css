@@ -1,0 +1,173 @@
+/* ============================================================
+   CalendarHeatmap — month grid with focus heatmap colors
+   ============================================================ */
+
+.container {
+  width: 100%;
+  max-width: 500px;
+}
+
+/* ---- Month header ---- */
+
+.monthHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.navBtn {
+  padding: 6px 12px;
+  font-size: 14px;
+  background: transparent;
+  color: var(--color-text-muted);
+  border-radius: var(--radius-sm);
+  transition: color 0.2s, background 0.2s;
+}
+
+.navBtn:hover {
+  color: var(--color-text);
+  background: var(--color-surface);
+}
+
+.monthLabel {
+  font-size: 16px;
+  font-weight: 600;
+  min-width: 160px;
+  text-align: center;
+  color: var(--color-text);
+}
+
+/* ---- Grid ---- */
+
+.weekRow {
+  display: flex;
+}
+
+.dayHeader {
+  flex: 1;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-text-muted);
+  padding: 4px 0;
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* ---- Cell ---- */
+
+.cell {
+  flex: 1;
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  color: var(--color-text-muted);
+  font-size: 13px;
+  font-family: var(--font-mono);
+  cursor: default;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.cell:not(:disabled):hover {
+  border-color: var(--color-border);
+}
+
+.currentMonth {
+  color: var(--color-text);
+}
+
+.otherMonth {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* ---- Today ---- */
+
+.today {
+  border-color: var(--color-primary);
+}
+
+.today .dayNum {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+/* ---- Selected ---- */
+
+.selected {
+  border-color: var(--color-primary);
+  background: var(--color-primary-soft);
+}
+
+/* ---- Heat levels ---- */
+
+.heat1 {
+  background: rgba(255, 107, 107, 0.12);
+}
+
+.heat2 {
+  background: rgba(255, 107, 107, 0.28);
+}
+
+.heat3 {
+  background: rgba(255, 107, 107, 0.50);
+}
+
+.heat1.selected,
+.heat2.selected,
+.heat3.selected {
+  background: rgba(255, 107, 107, 0.35);
+}
+
+/* ---- Dot indicators ---- */
+
+.dots {
+  display: flex;
+  gap: 3px;
+}
+
+.dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--color-primary);
+}
+
+.todoDot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #5b9bd5;  /* blue for todos */
+}
+
+/* Highlight cell border when there are todos */
+.hasTodos {
+  /* subtle indication via the existing cell structure */
+}
+
+.dayNum {
+  line-height: 1;
+}
+
+/* ---- Selected day info ---- */
+
+.selectedInfo {
+  margin-top: 12px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}

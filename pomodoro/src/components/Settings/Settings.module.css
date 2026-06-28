@@ -1,23 +1,88 @@
 /* ============================================================
-   Settings panel — work/break duration sliders
+   Settings panel — work/break duration sliders, collapsible
    ============================================================ */
 
 .panel {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
-  padding: 24px;
-  max-width: 360px;
+  max-width: 500px;
   width: 100%;
 }
 
-.title {
-  font-size: 14px;
+/* ---- Header bar (always visible, click to toggle) ---- */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 16px 20px;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 13px;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  color: var(--color-text-muted);
-  margin-bottom: 20px;
+  letter-spacing: 1.5px;
+  transition: color 0.2s;
+  text-align: left;
+}
+
+.header:hover {
+  color: var(--color-text);
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chevron {
+  font-size: 10px;
+  transition: transform 0.25s ease;
+  display: inline-block;
+}
+
+.chevronOpen {
+  transform: rotate(90deg);
+}
+
+.headerIcon {
+  font-size: 16px;
+}
+
+.headerTitle {
+  font-size: 13px;
+}
+
+.headerBadge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  padding: 2px 8px;
+  border-radius: 99px;
+  white-space: nowrap;
+}
+
+/* ---- Collapsible body ---- */
+
+.body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease, opacity 0.25s ease;
+  opacity: 0;
+}
+
+.bodyOpen {
+  max-height: 800px;
+  opacity: 1;
+}
+
+.bodyInner {
+  padding: 0 20px 20px;
 }
 
 .field {
@@ -87,4 +152,114 @@
   font-size: 13px;
   color: var(--color-text-muted);
   padding: 8px 0;
+}
+
+/* ---- Notification toggle switch ---- */
+
+.toggleBtn {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  border-radius: 12px;
+  background: var(--color-border);
+  transition: background 0.2s;
+  padding: 0;
+}
+
+.toggleBtn.toggleOn {
+  background: var(--color-primary);
+}
+
+.toggleKnob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s;
+}
+
+.toggleOn .toggleKnob {
+  transform: translateX(20px);
+}
+
+.toggleHint {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* ---- Mode toggle ---- */
+
+.modeToggle {
+  display: flex;
+  gap: 0;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+}
+
+.modeBtn {
+  flex: 1;
+  padding: 7px 0;
+  font-size: 13px;
+  font-weight: 500;
+  background: transparent;
+  color: var(--color-text-muted);
+  transition: background 0.2s, color 0.2s;
+}
+
+.modeBtn:first-child {
+  border-right: 1px solid var(--color-border);
+}
+
+.modeBtn.active {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.modeBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---- Preset buttons ---- */
+
+.presets {
+  display: flex;
+  gap: 6px;
+}
+
+.presetBtn {
+  flex: 1;
+  padding: 6px 0;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font-mono);
+  background: var(--color-bg);
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.presetBtn:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-text);
+}
+
+.presetBtn.active {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.presetBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
