@@ -31,6 +31,8 @@ export function Settings({ shortcutBindings, onBindingsChange }: SettingsProps) 
 
   const handleRecordKey = (e: React.KeyboardEvent) => {
     if (!recording || !onBindingsChange || !shortcutBindings) return;
+    // Ignore modifier-only key presses
+    if (['Control', 'Shift', 'Alt', 'Meta'].includes(e.key)) return;
     e.preventDefault();
     e.stopPropagation();
     const parts: string[] = [];
