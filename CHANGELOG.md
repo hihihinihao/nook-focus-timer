@@ -107,6 +107,14 @@ pomodoro/
 
 ## 更新日志
 
+### 2026-06-28 — v0.3 Design System + Keyboard Shortcuts
+- [x] **UI 基组件** — `Button`（4 variant）/ `Toggle` / `Badge` / `Card` + 统一 `ui.module.css`
+- [x] **Settings 重构** — 两处 toggle 替换为 `<Toggle>`，删除手写 CSS
+- [x] **TimerControls 重构** — 按钮替换为 `<Button>`，删除独立 btn 样式
+- [x] **全局快捷键** — `Ctrl+1` Start/Pause，`Ctrl+2` Skip/Next
+- [x] **快捷键自定义** — Settings 内点击绑定 → 按新组合键 → 保存，支持恢复默认
+- [x] **ROADMAP.md** — 项目路线图和版本策略
+
 ### 2026-06-28 — v0.2 功能迭代
 - [x] **TodoList** — 可折叠面板 + 标题栏折叠动画
 - [x] **TodoList 拖拽停靠** — 拖动把手 ⠿ 到底部/左侧/右侧，桌面端自由切换
