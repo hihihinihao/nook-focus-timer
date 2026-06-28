@@ -137,7 +137,7 @@ export function DayDetail({ dateKey, onClose, onTodosChange }: DayDetailProps) {
         </div>
 
         {dateTodos.length === 0 ? (
-          <p className={styles.empty}>No tasks for this date yet.</p>
+          <p className={styles.empty}>Nothing planned for this day.</p>
         ) : (
           <ul className={styles.todoList}>
             {dateTodos.map((todo) => (
@@ -181,7 +181,7 @@ export function DayDetail({ dateKey, onClose, onTodosChange }: DayDetailProps) {
         </div>
 
         {sessions.length === 0 ? (
-          <p className={styles.empty}>No sessions on this date.</p>
+          <p className={styles.empty}>No focus recorded. Yet.</p>
         ) : (
           <>
             <ul className={styles.sessionList}>

@@ -21,15 +21,22 @@
   font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.3px;
-  transition: background 0.2s, transform 0.1s, opacity 0.2s, color 0.2s;
+  transition: background var(--duration-fast) var(--ease-soft),
+              transform var(--duration-fast) var(--ease-soft),
+              opacity var(--duration-fast) var(--ease-soft),
+              color var(--duration-fast) var(--ease-soft);
   cursor: pointer;
   border: none;
   outline: none;
   font-family: inherit;
 }
 
+.btn:hover {
+  transform: scale(1.02);
+}
+
 .btn:active {
-  transform: scale(0.97);
+  transform: scale(0.98);
 }
 
 /* Primary */

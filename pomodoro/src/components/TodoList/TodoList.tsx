@@ -139,7 +139,7 @@ export function TodoList({ dragHandlers, isDragging, dockPosition, dueDate }: To
 
           {/* List */}
           {visibleTodos.length === 0 ? (
-            <p className={styles.empty}>No tasks yet. Add one above!</p>
+            <p className={styles.empty}>Nothing planned. Enjoy the quiet.</p>
           ) : (
             <ul className={styles.list}>
               {visibleTodos.map((todo) => (

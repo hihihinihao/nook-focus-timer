@@ -29,7 +29,7 @@ export function SessionLog() {
       <h3 className={styles.title}>Today's Sessions</h3>
 
       {todaySessions.length === 0 ? (
-        <p className={styles.empty}>No sessions yet. Start your first Nook session!</p>
+        <p className={styles.empty}>Your first focus starts today.</p>
       ) : (
         <>
           <ul className={styles.list}>

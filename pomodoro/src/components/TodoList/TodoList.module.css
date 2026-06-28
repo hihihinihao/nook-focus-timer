@@ -71,7 +71,7 @@
 
 .chevron {
   font-size: 10px;
-  transition: transform 0.25s ease;
+  transition: transform var(--duration-normal) var(--ease-soft);
   display: inline-block;
 }
 
@@ -136,13 +136,17 @@
 .body {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.35s ease, opacity 0.25s ease;
   opacity: 0;
+  transform: translateY(-4px);
+  transition: max-height var(--duration-normal) var(--ease-breathe),
+              opacity var(--duration-normal) var(--ease-soft),
+              transform var(--duration-normal) var(--ease-soft);
 }
 
 .bodyOpen {
   max-height: 600px;
   opacity: 1;
+  transform: translateY(0);
 }
 
 .bodyInner {

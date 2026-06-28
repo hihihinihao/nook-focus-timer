@@ -102,10 +102,65 @@
 /* ---- Paused overlay ---- */
 
 .paused .time {
-  animation: pulse 2s ease-in-out infinite;
+  animation: timePulse 2s ease-in-out infinite;
 }
 
-@keyframes pulse {
+@keyframes timePulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
+}
+
+/* ---- Status message (floats above ring, absolute) ---- */
+
+.statusMsg {
+  position: absolute;
+  top: -32px;
+  left: 0;
+  right: 0;
+  height: 24px;
+  line-height: 24px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  text-align: center;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity var(--duration-slow) var(--ease-soft),
+              transform var(--duration-slow) var(--ease-soft);
+  user-select: none;
+}
+
+.statusShow {
+  opacity: 0.8;
+  transform: translateY(0);
+}
+
+/* ---- Completion: ring glow ---- */
+
+.ringGlow .ringProgress {
+  filter: drop-shadow(0 0 8px currentColor);
+}
+
+.timeBright {
+  color: var(--color-text);
+  transition: color 0.3s ease;
+}
+
+/* ---- Checkmark (absolute, outside flex flow) ---- */
+
+.checkmark {
+  position: absolute;
+  bottom: 44px;
+  left: 50%;
+  transform: translateX(-50%) scale(0.5);
+  font-size: 18px;
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-soft) 0.15s,
+              transform 0.3s var(--ease-soft) 0.15s;
+  user-select: none;
+}
+
+.checkmarkShow {
+  opacity: 0.5;
+  transform: translateX(-50%) scale(1);
 }
