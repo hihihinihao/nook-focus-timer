@@ -171,3 +171,41 @@
   font-size: 13px;
   color: var(--color-text-muted);
 }
+
+@media (max-width: 428px) {
+  .container {
+    max-width: 100%;
+  }
+
+  .monthLabel {
+    font-size: 14px;
+    min-width: auto;
+  }
+
+  .navBtn {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+
+  .dayHeader {
+    font-size: 10px;
+    letter-spacing: 0.5px;
+  }
+
+  .cell {
+    min-width: 36px;
+    min-height: 36px;
+    font-size: 12px;
+    border-radius: 6px;
+  }
+
+  .dot,
+  .todoDot {
+    width: 3px;
+    height: 3px;
+  }
+
+  .selectedInfo {
+    font-size: 12px;
+  }
+}

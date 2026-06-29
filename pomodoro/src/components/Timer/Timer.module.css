@@ -164,3 +164,33 @@
   opacity: 0.5;
   transform: translateX(-50%) scale(1);
 }
+
+/* ---- Responsive ---- */
+
+@media (max-width: 428px) {
+  .container {
+    padding: 24px 12px;
+    gap: 20px;
+  }
+
+  .ring {
+    width: 240px;
+    height: 240px;
+  }
+
+  .time {
+    font-size: 48px;
+  }
+
+  .phaseLabel {
+    font-size: 12px;
+  }
+
+  .statusMsg {
+    top: -28px;
+  }
+
+  .checkmark {
+    bottom: 36px;
+  }
+}

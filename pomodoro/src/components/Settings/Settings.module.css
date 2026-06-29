@@ -287,3 +287,27 @@
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
 }
+
+@media (max-width: 428px) {
+  .panel {
+    max-width: 100%;
+  }
+
+  .header {
+    padding: 14px 16px;
+  }
+
+  .bodyInner {
+    padding: 0 14px 14px;
+  }
+
+  .modeBtn {
+    font-size: 12px;
+    padding: 6px 0;
+  }
+
+  .presetBtn {
+    font-size: 12px;
+    padding: 5px 0;
+  }
+}

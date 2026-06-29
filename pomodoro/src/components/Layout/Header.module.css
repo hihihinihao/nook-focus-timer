@@ -78,3 +78,31 @@
   color: var(--color-primary);
   font-weight: 600;
 }
+
+@media (max-width: 428px) {
+  .header {
+    padding: 12px 14px;
+  }
+
+  .brand {
+    display: none;
+  }
+
+  .icon {
+    font-size: 20px;
+  }
+
+  .tab {
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+
+  .themeBtn {
+    padding: 4px 6px;
+    font-size: 14px;
+  }
+
+  .actions {
+    gap: 4px;
+  }
+}

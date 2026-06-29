@@ -257,3 +257,31 @@
   color: var(--color-text-muted);
   text-align: right;
 }
+
+@media (max-width: 428px) {
+  .panel {
+    max-width: calc(100vw - 32px);
+  }
+
+  .header {
+    padding: 12px 14px;
+  }
+
+  .title {
+    font-size: 14px;
+  }
+
+  .section {
+    padding: 12px 14px;
+  }
+
+  .input {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  .addBtn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}

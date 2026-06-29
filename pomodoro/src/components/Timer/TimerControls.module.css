@@ -17,3 +17,9 @@
   background: #ff9800;
 }
 
+@media (max-width: 428px) {
+  .controls {
+    gap: 8px;
+  }
+}
+
