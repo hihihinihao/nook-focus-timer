@@ -4,6 +4,26 @@
 
 Nook helps you stay in flow with a clean circular timer, calendar heatmaps that show your rhythm over time, and a smart todo list that respects your workspace — drag it anywhere, or hide it entirely.
 
+## 📸 Screenshots
+
+<div align="center">
+  <img src="screenshots/screenshot-01-timer.png" alt="Timer — Dark theme" width="400">
+  <img src="screenshots/screenshot-02-settings.png" alt="Settings panel" width="400">
+</div>
+
+<div align="center">
+  <img src="screenshots/screenshot-04-light-theme.png" alt="Light theme" width="258">
+  <img src="screenshots/screenshot-03-warm-theme.png" alt="Warm theme" width="258">
+  <img src="screenshots/screenshot-08-timer-running.png" alt="Timer running" width="258">
+</div>
+
+<div align="center">
+  <img src="screenshots/screenshot-05-stats.png" alt="Stats — Calendar heatmap" width="400">
+  <img src="screenshots/screenshot-06-day-detail.png" alt="Day detail popup" width="400">
+</div>
+
+> **Timer** — circular progress ring with countdown / countup · **Settings** — durations, modes, notifications, custom shortcuts · **Themes** — Dark, Warm, Light · **Stats** — monthly heatmap with clickable day detail
+
 ---
 
 ## ✨ What It Does
