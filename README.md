@@ -6,23 +6,57 @@ Nook helps you stay in flow with a clean circular timer, calendar heatmaps that 
 
 ## 📸 Screenshots
 
-<div align="center">
-  <img src="screenshots/screenshot-01-timer.png" alt="Timer — Dark theme" width="400">
-  <img src="screenshots/screenshot-02-settings.png" alt="Settings panel" width="400">
-</div>
+### ⏱ Timer
 
-<div align="center">
-  <img src="screenshots/screenshot-04-light-theme.png" alt="Light theme" width="258">
-  <img src="screenshots/screenshot-03-warm-theme.png" alt="Warm theme" width="258">
-  <img src="screenshots/screenshot-08-timer-running.png" alt="Timer running" width="258">
-</div>
+The main view — a circular SVG progress ring with elapsed / remaining time, session dots, and controls for Start, Pause, Skip, and Reset.
 
-<div align="center">
-  <img src="screenshots/screenshot-05-stats.png" alt="Stats — Calendar heatmap" width="400">
-  <img src="screenshots/screenshot-06-day-detail.png" alt="Day detail popup" width="400">
-</div>
+<p align="center">
+  <img src="screenshots/screenshot-01-timer.png" alt="Timer main" width="500">
+</p>
 
-> **Timer** — circular progress ring with countdown / countup · **Settings** — durations, modes, notifications, custom shortcuts · **Themes** — Dark, Warm, Light · **Stats** — monthly heatmap with clickable day detail
+### ⚙️ Settings
+
+Collapsible settings panel. Adjust work/break durations, toggle between countdown and countup per phase, enable notifications, auto-start, and record custom keyboard shortcuts.
+
+<p align="center">
+  <img src="screenshots/screenshot-02-settings.png" alt="Settings panel" width="500">
+</p>
+
+### 🎨 Themes
+
+Three built-in themes, one click to cycle: Dark, Warm, and Light. Settings are locked while the timer runs to prevent accidental changes.
+
+<p align="center">
+  <img src="screenshots/screenshot-03-warm-theme.png" alt="Warm theme" width="500">
+</p>
+
+<p align="center">
+  <img src="screenshots/screenshot-04-light-theme.png" alt="Light theme" width="500">
+</p>
+
+### ▶ Timer Running
+
+The timer in action. The document title updates in real-time, and desktop notifications fire when a phase completes.
+
+<p align="center">
+  <img src="screenshots/screenshot-08-timer-running.png" alt="Timer running" width="500">
+</p>
+
+### 📊 Stats — Calendar Heatmap
+
+A GitHub-style monthly heatmap showing your focus intensity. Each cell's color depth reflects total minutes focused that day. Click any day to open a detail panel with session records and linked todos.
+
+<p align="center">
+  <img src="screenshots/screenshot-05-stats.png" alt="Stats page" width="500">
+</p>
+
+### 📅 Day Detail
+
+Click a day on the heatmap to see session logs and manage todos for that date — all in one popover.
+
+<p align="center">
+  <img src="screenshots/screenshot-06-day-detail.png" alt="Day detail" width="500">
+</p>
 
 ---
 
