@@ -143,7 +143,7 @@ No state management library. No CSS framework. No backend.
 - [ ] v0.6 — Interaction guards (reset confirmation, lock tooltips) + sound themes
 - [ ] v1.0 — PWA, routing, unit tests, stable release
 
-See [ROADMAP.md](ROADMAP.md) for details and the "won't do" list.
+Check `ROADMAP.md` (local only) for upcoming plans and the "won't do" list.
 
 ---
 
