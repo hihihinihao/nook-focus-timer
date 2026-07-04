@@ -27,10 +27,6 @@ Collapsible settings panel. Adjust work/break durations, toggle between countdow
 Three built-in themes, one click to cycle: Dark, Warm, and Light. Settings are locked while the timer runs to prevent accidental changes.
 
 <p align="center">
-  <img src="screenshots/screenshot-03-warm-theme.png" alt="Warm theme" width="500">
-</p>
-
-<p align="center">
   <img src="screenshots/screenshot-04-light-theme.png" alt="Light theme" width="500">
 </p>
 
